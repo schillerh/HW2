@@ -21,19 +21,16 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 
-//import reference.Account;
-import reference.AccountingViewDelegate;
-
 import calc.controller.AcctListController;
-
 import calc.controller.AcctController;
 import calc.model.AcctListModel;
 import calc.model.AcctModel;
 import calc.model.ModelEvent;
+import calc.model.SaveModel;
 
 public class AcctListView extends JFrameView {
 
-    private AccountingViewDelegate delegate;
+ 
     private AcctListModel accounting;
 
     private JComboBox comboBox;
@@ -74,7 +71,7 @@ public class AcctListView extends JFrameView {
             //Vector<AcctModel> test = new Vector<AcctModel>(acct);
             //System.out.println(acct.toString());
             //System.out.println(test);
-            System.out.println(accounting.acctList.toString());
+           // System.out.println(accounting.acctList.toString());
             //System.out.println(accounting.getAccounts().toArray());
             Vector test= accounting.getAcc();
             System.out.println(test.elements());
@@ -96,10 +93,11 @@ public class AcctListView extends JFrameView {
             Handler handler = new Handler(); 
     		JButton jButtonUSD = new JButton(USD); 
     		jButtonUSD.addActionListener(new ActionListener() {
-    			this.accounting.getAccounts().get(comboBox.getSelectedIndex());
+    			//this.accounting.getAccounts().get(comboBox.getSelectedIndex());
     			public void actionPerformed(ActionEvent event) {
                     //doEditAccount(currency);
-                	new AcctController(accounting.getAccounts().get(comboBox.getSelectedIndex()),"Dollars");
+    				((AcctListController)getController()).operation("Dollars",comboBox.getSelectedIndex());
+    				//new AcctController(accounting.getAccounts().get(comboBox.getSelectedIndex()),"Dollars");
                 }
     		});
     		panel.add(jButtonUSD, constraints);
@@ -108,7 +106,9 @@ public class AcctListView extends JFrameView {
     		jButtonEuro.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent event) {
                     //doEditAccount(currency);
-                	new AcctController(accounting.getAccounts().get(comboBox.getSelectedIndex()),"Euro");
+                	//new AcctController(accounting.getAccounts().get(comboBox.getSelectedIndex()),"Euro");
+                	((AcctListController)getController()).operation("Euro",comboBox.getSelectedIndex());
+    				
                 }
     		});
     		panel.add(jButtonEuro, constraints);
@@ -117,7 +117,9 @@ public class AcctListView extends JFrameView {
     		jButtonYen.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent event) {
                     //doEditAccount(currency);
-                	new AcctController(accounting.getAccounts().get(comboBox.getSelectedIndex()),"Yen");
+                	//new AcctController(accounting.getAccounts().get(comboBox.getSelectedIndex()),"Yen");
+                	((AcctListController)getController()).operation("Yen",comboBox.getSelectedIndex());
+    				
                 }
     		}); 
     		panel.add(jButtonYen, constraints);
@@ -152,7 +154,11 @@ public class AcctListView extends JFrameView {
 
             // Add a Save button
             JButton jButtonSave = new JButton(SAVE); 
-    		jButtonSave.addActionListener(handler); 
+    		jButtonSave.addActionListener(new ActionListener(){
+    			public void actionPerformed(ActionEvent event){
+    			SaveModel.write(accounting);	
+    			}
+    		}); 
     		
             
             /*JButton button = new JButton("Save");
@@ -169,8 +175,12 @@ public class AcctListView extends JFrameView {
             rootPanel.add(jButtonSave, constraints);
 
             // And an Exit button
-            JButton jButtonExit = new JButton(EXIT); 
-    		jButtonExit.addActionListener(handler); 
+            JButton jButtonExit = new JButton(EXIT);
+            jButtonExit.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent event) {
+                    dispose();
+                }
+            });
             /*button = new JButton("Exit");
             button.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent event) {
@@ -197,19 +207,13 @@ public class AcctListView extends JFrameView {
         delegate.doEditAccount((Account)comboBox.getSelectedItem(), currency);
     }
 */
-    public AccountingViewDelegate getDelegate() {
-        return delegate;
-    }
-
-    public void setDelegate(AccountingViewDelegate delegate) {
-        this.delegate = delegate;
-    }
-
+ 
 
 	
-	 // Now implement the necessary event handling code 
+	 // Now implement the necessary event 	handling code 
 	public void modelChanged(ModelEvent event) {
-	//String msg = event.getAmount() + "";
+	String msg = event.getAmount() + "";
+	event.notifyAll();
 	//textField.setText(msg);
 	comboBox.getSelectedItem();
 	 }
@@ -217,7 +221,7 @@ public class AcctListView extends JFrameView {
 	class Handler implements ActionListener { 
 		// Event handling is handled locally
 		public void actionPerformed(ActionEvent e) {
-			((AcctListController)getController()).operation(e.getActionCommand()); 
+			((AcctListController)getController()).operation(e.getActionCommand(),comboBox.getSelectedIndex()); 
 	    } }
 	
 

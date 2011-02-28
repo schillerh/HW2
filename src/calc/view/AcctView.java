@@ -28,6 +28,7 @@ import javax.swing.event.DocumentEvent;
 //import reference.NumericTextField;
 
 import calc.controller.AcctController;
+import calc.controller.AcctListController;
 import calc.model.AcctModel;
 import calc.model.AcctListModel;
 import calc.model.ModelEvent;
@@ -41,6 +42,7 @@ public class AcctView extends JFrameView {
 	public static final String WITHDRAW = "Withdraw";
 	public static final String DISMISS = "Dismiss";
 	
+	private String srcCurrency;
 	private JTextField textField = new JTextField(); 
 	private JTextField balanceField = new JTextField();
 	private JTextField entryField = new JTextField();
@@ -49,7 +51,7 @@ public class AcctView extends JFrameView {
 	public AcctView(final AcctModel model, AcctController controller, final String currency) { 
 		super(model, controller); 
 		textField.setText(model.abalance().toString());
-		
+		this.srcCurrency=currency;
 		//private AccountViewDelegate delegate;
 	   // private NumericTextField entryField;
 	   
@@ -77,7 +79,7 @@ public class AcctView extends JFrameView {
 	            //updateBalance();
 	            System.out.println("model.abbalance: "+model.abalance());
 	            System.out.println("model.abbalance to string: "+model.abalance().toString());
-	            balanceField.setText(model.abalance().toString());
+	            balanceField.setText(String.valueOf(model.fromUSD(model.abalance(),currency)));
 	            balanceField.setEditable(false);
 	            constraints.gridx = 1;
 	            transactionPanel.add(balanceField, constraints);
@@ -110,9 +112,11 @@ public class AcctView extends JFrameView {
 	            button.addActionListener(new ActionListener() {
 	                public void actionPerformed(ActionEvent event) {
 	//                    doDeposit();
-	                
-	                    balanceField.setText(String.valueOf(model.deposit(entryField.getText(), currency)));
-	                    
+	                	//balanceField.setText(String.valueOf(((AcctModel)getModel()).deposit(entryField.getText(), srcCurrency)));
+	                   // balanceField.setText(String.valueOf(model.deposit(entryField.getText(), srcCurrency)));
+	                    ((AcctController)getController()).operation(entryField.getText(),srcCurrency, "Deposit");
+	                   // updateBalance();
+	                   
 	                }
 	            });
 	            constraints = new GridBagConstraints();
@@ -123,7 +127,9 @@ public class AcctView extends JFrameView {
 	            button = new JButton("Withdraw");
 	            button.addActionListener(new ActionListener() {
 	                public void actionPerformed(ActionEvent event) {
-	                    model.withdraw(new Double(entryField.getText()), currency);
+	                	//balanceField.setText(String.valueOf(model.withdraw(entryField.getText(), srcCurrency)));
+	                	((AcctController)getController()).operation(entryField.getText(),srcCurrency, "Withdraw");
+	                    //updateBalance();	
 	                }
 	            });
 	            constraints.gridx = 1;
@@ -162,11 +168,12 @@ public class AcctView extends JFrameView {
 	    public void clearEntry() {
 	        //entryField.(0.00);
 	    }
-/*
-	    public void updateBalance(Double  bal) {
-	        balanceField.getSelectedText(bal);
-	    }
 
+	    public void updateBalance() {
+	        this.balanceField.setText(String.valueOf(((AcctModel)getModel()).getBalance(this.srcCurrency)));
+	    }
+	    
+	    /*
 	    private void doWithdraw() {
 	        try {
 	           this.model.this.withdraw(new Double(entryField.getText()));
@@ -206,15 +213,15 @@ public class AcctView extends JFrameView {
 	    }*/
 		 // Now implement the necessary event handling code 
 		public void modelChanged(ModelEvent event) {
-		String msg = event.getAmount() + "";
-		textField.setText(msg);
+			updateBalance();	
+		//balanceField.setText(String.valueOf(event.getAmount()));
 
 		 }
 		 // Inner classes for Event Handling 
 		class Handler implements ActionListener { 
 			// Event handling is handled locally
 			public void actionPerformed(ActionEvent e) {
-				((AcctController)getController()).operation(e.getActionCommand()); 
+				((AcctController)getController()).operation(e.getActionCommand(),"",""); 
 		    } }
 	}
 /*

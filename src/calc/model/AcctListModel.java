@@ -16,8 +16,9 @@ import calc.view.AcctListView;
 //import reference.Accounting;
 
 public class AcctListModel extends AbstractModel {
-	public ArrayList<AcctModel> acctList;
+	private ArrayList<AcctModel> acctList;
 	//private Vector<AcctModel> acctList;
+	private String fName;
 	public String DOLLAR = "Dollar";
 	public String YEN = "Yen";
 	public String EURO = "Euro";
@@ -27,6 +28,7 @@ public class AcctListModel extends AbstractModel {
     
 	public  AcctListModel(String fileName) throws FileNotFoundException, ParseException{
 		this.acctList = new ArrayList<AcctModel>();
+		fName=fileName;
 		//this.parseFile(fileName);
 		this.aname= new Vector<String>();
 		this.aid= new Vector<Integer>();
@@ -34,7 +36,7 @@ public class AcctListModel extends AbstractModel {
 		BufferedReader buffer;
 		try {
             //Accounting accounting = new Accounting(filename);
-            buffer = new BufferedReader(new FileReader(fileName));
+            buffer = new BufferedReader(new FileReader(fName));
 
             // Parse each line of the file
             int lineNumber = 0;
@@ -118,6 +120,9 @@ public class AcctListModel extends AbstractModel {
 	}
 	public Vector<Double> getBalance(){
 		return abalance;
+	}
+	public String getFilename(){
+		return fName;
 	}
 	//public ArrayList<AcctModel> parseFile (String fileName) throws FileNotFoundException, ParseException{
 	//File file =new File(fileName);

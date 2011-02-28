@@ -1,9 +1,6 @@
 package calc.controller;
 import calc.model.AcctListModel;
 import calc.model.AcctModel;
-import calc.model.CalculatorModel;
-import calc.model.Digit5;
-import calc.view.CalculatorView;
 import calc.view.AcctListView;
 import calc.view.JFrameView;
 
@@ -18,11 +15,14 @@ public class AcctListController extends AbstractController {
 		((JFrameView)getView()).setVisible(true);
 	}
 
-	public void operation(String option ){
-		if(option.equals(AcctListView.USD)){
+	public void operation(String option, int index ){
+		//if(option.equals("Dollars")){
 			//new AcctController();
-			((AcctModel)getModel()).deposit("2930","USD");
-		}else if(option.equals(CalculatorView.PLUS)){
+			//((AcctListModel)getModel()).acctList.get(index);
+			//new AcctController(((AcctListModel)getModel()).acctList.get(index),option);
+			//((AcctModel)getModel()).deposit("2930","USD");
+			new AcctController(((AcctListModel)getModel()).getAccounts().get(index),option);
+		/*}else if(option.equals("Euro")){
 			try{
 				((CalculatorModel)getModel()).add();
 			}catch(Digit5 ex)
@@ -34,5 +34,6 @@ public class AcctListController extends AbstractController {
 		}else {
 			((CalculatorModel)getModel()).store(Integer.parseInt(option));
 		}
+		*/
 	
 }}
