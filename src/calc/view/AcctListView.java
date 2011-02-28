@@ -78,7 +78,8 @@ public class AcctListView extends JFrameView {
             //System.out.println(accounting.getAccounts().toArray());
             Vector test= accounting.getAcc();
             System.out.println(test.elements());
-            comboBox = new JComboBox(accounting.getName());
+            System.out.println("Account testing stuff: "+this.accounting.getAccounts().toString());
+            comboBox = new JComboBox(this.accounting.getName());
             panel.add(comboBox, constraints);
 
             constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -95,19 +96,30 @@ public class AcctListView extends JFrameView {
             Handler handler = new Handler(); 
     		JButton jButtonUSD = new JButton(USD); 
     		jButtonUSD.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent event) {
+    			this.accounting.getAccounts().get(comboBox.getSelectedIndex());
+    			public void actionPerformed(ActionEvent event) {
                     //doEditAccount(currency);
-                	new AcctController(accounting.getAccounts().get(comboBox.getSelectedIndex()),USD);
+                	new AcctController(accounting.getAccounts().get(comboBox.getSelectedIndex()),"Dollars");
                 }
     		});
     		panel.add(jButtonUSD, constraints);
             constraints.gridx++;
     		JButton jButtonEuro = new JButton(EURO); 
-    		jButtonEuro.addActionListener(handler);
+    		jButtonEuro.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent event) {
+                    //doEditAccount(currency);
+                	new AcctController(accounting.getAccounts().get(comboBox.getSelectedIndex()),"Euro");
+                }
+    		});
     		panel.add(jButtonEuro, constraints);
             constraints.gridx++;
     		JButton jButtonYen = new JButton(YEN); 
-    		jButtonYen.addActionListener(handler); 
+    		jButtonYen.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent event) {
+                    //doEditAccount(currency);
+                	new AcctController(accounting.getAccounts().get(comboBox.getSelectedIndex()),"Yen");
+                }
+    		}); 
     		panel.add(jButtonYen, constraints);
             constraints.gridx++;
             
@@ -208,11 +220,7 @@ public class AcctListView extends JFrameView {
 			((AcctListController)getController()).operation(e.getActionCommand()); 
 	    } }
 	
-	public static void main(String [] args) throws FileNotFoundException, ParseException { 
-		String temp;
-		temp= args[0];
-		System.out.println(temp);
-		new AcctListController(temp); }
+
 	
 }
 	/*

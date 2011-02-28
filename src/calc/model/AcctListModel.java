@@ -75,8 +75,9 @@ public class AcctListModel extends AbstractModel {
             }
             // Clean up
             buffer.close();
-            
-           // return acctList;
+            System.out.println("after Buffer close: "+this.acctList.get(1).getBalance());
+           this.acctList.get(1).deposit("100", "Dollars");
+            // return acctList;
         } catch (NumberFormatException ex) {
             // Handle invalid ids and balances. This should never occur since we matched our numbers via regex
             ex.printStackTrace();

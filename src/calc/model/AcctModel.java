@@ -17,11 +17,14 @@ public class AcctModel extends AbstractModel {
 	public double getBalance(int accNum, String aCurrency){
 		return this.fromUSD(this.acctBalance, aCurrency);
 	}
+	public double getBalance(){
+		return acctBalance;
+	}
 	public String getName(int accNum){
 		return this.acctName;
 	}
 	
-	public void deposit(String amount, String srcCurrency) {
+	public double deposit(String amount, String srcCurrency) {
 		System.out.println("Deposit amount: "+amount);
 		
 		double aAmount = Double.valueOf(amount.trim()).doubleValue();
@@ -30,6 +33,7 @@ public class AcctModel extends AbstractModel {
 	
 		ModelEvent me = new ModelEvent(this, 1, "", this.acctBalance);
 		notifyChanged(me);
+		return acctBalance;
 	}
 
 	public void withdraw(double aAmount, String srcCurrency) {

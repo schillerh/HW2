@@ -75,6 +75,8 @@ public class AcctView extends JFrameView {
 	            transactionPanel.add(fundsLabel, constraints);
 	            balanceField = new JTextField(10);
 	            //updateBalance();
+	            System.out.println("model.abbalance: "+model.abalance());
+	            System.out.println("model.abbalance to string: "+model.abalance().toString());
 	            balanceField.setText(model.abalance().toString());
 	            balanceField.setEditable(false);
 	            constraints.gridx = 1;
@@ -108,7 +110,9 @@ public class AcctView extends JFrameView {
 	            button.addActionListener(new ActionListener() {
 	                public void actionPerformed(ActionEvent event) {
 	//                    doDeposit();
-	                    model.deposit(entryField.getSelectedText(), currency);
+	                
+	                    balanceField.setText(String.valueOf(model.deposit(entryField.getText(), currency)));
+	                    
 	                }
 	            });
 	            constraints = new GridBagConstraints();
